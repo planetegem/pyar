@@ -1,0 +1,185 @@
+:root {
+    --darkColor: #666666;
+    --mediumColor: #999999;
+    --lightColor: #f3f3f3;
+    
+    --canvasSize: 70vh;
+
+    --pyarYellow: #fff8a3;
+    --lightYellow: #fffbcc;
+    --darkYellow: #e0d222;
+}
+* {
+    margin: 0; padding: 0;
+}
+button, h2, h3, h4, h1 {
+    all: unset;
+}
+body, html {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    font-size: 3vw;
+}
+main {
+    width: 90vw;
+    margin: auto;
+}
+#list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+}
+.artwork {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    margin: 1em 1em;
+    padding: 1em 0;
+    background-color: white;
+    border-radius: 0.5em;
+}
+img {
+    width: 90%;
+}
+h2 {
+    font-variant: small-caps;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 0.8em 0;
+    color: var(--darkColor);
+    max-width: 90%;
+    min-height: 2.3em;
+}
+p {
+    font-size: 0.9em;
+    color: var(--mediumColor);
+    max-width: 90%;
+}
+#pageFlipper {
+    margin: auto;
+    min-width: 40%;
+    max-width: 20em;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1em;
+}
+button {
+    display: flex;
+    align-items: center;
+    font-size: 1.3em;
+}
+button > img {
+    height: 1em;
+    width: 1em;
+    margin: 0 0.3em;
+}
+h3 {
+    font-variant: small-caps;
+    font-size: 1em;
+}
+button:hover {
+    cursor: pointer;
+}
+button:hover > h3 {
+    text-decoration: underline;
+}
+button.inactive {
+    opacity: 0.3;
+}
+button.inactive:hover {
+    cursor: default;
+}
+button.inactive:hover > h3 {
+    text-decoration: none;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    width: 60%;
+}
+footer p {
+    font-size: 0.65em;
+    text-align:center;
+    font-family: Georgia sans-serif;
+}
+footer a {
+    color: var(--mediumColor);
+}
+.divider {
+    width: 30%;
+}
+#returnbutton {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.75em;
+    opacity: 0.75;
+    font-size: 0.85em;
+    border: 0.1em outset var(--mediumColor);
+    padding: 0.1em 0.2em;
+}
+#returnbutton h4 {
+    text-align: left;
+    margin: 0;
+    font-variant: small-caps;
+    margin-left: 0.2em;
+    font-weight: 600;
+}
+#return {
+    background-image: url("/images/returngrey.svg");
+    width: 5em;
+    height: 2.5em;
+    background-repeat:no-repeat;
+    background-size:contain;
+}
+#returnbutton:hover {
+    color: #7D1E2D;
+    border-color: #7D1E2D20;
+    cursor: pointer;
+}
+#returnbutton:hover #return {
+    background-image: url("/images/return.svg");
+}
+
+
+
+@media only screen and (min-width: 600px) {
+    body, html {
+        font-size: 15px;
+    }
+    main {
+        max-width: 90vw;
+    }
+    #list {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+    }
+    .artwork {
+        max-width: 400px;
+    }
+    img {
+        width: 90%;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    #list {
+        max-width: 75vw;
+    }
+}
+@media only screen and (min-width: 2000px) {
+    body, html {
+        font-size: 18px;
+    }
+    .artwork {
+        max-width: 500px;
+    }
+}
