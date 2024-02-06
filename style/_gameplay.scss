@@ -1,0 +1,457 @@
+@use 'variables';
+
+// Grid properties
+main {
+    display: grid;
+    grid-template:
+        "mainMenu"
+        "workspace"
+        "prompt";
+    justify-items: center;
+    position: relative;
+    font-size: variables.$fontSize;
+}
+#prompt {grid-area: prompt;}
+#workspace {grid-area: workspace;}
+#mainMenu {grid-area: mainMenu;}
+#advancedMenu {grid-area: advancedMenu;}
+
+@media only screen and (min-width: variables.$mobileWidth) {    
+    main {
+        grid-template:
+        "advancedMenu workspace mainMenu" max-content
+        "advancedMenu prompt mainMenu" auto
+        / auto max-content auto;
+        font-size: calc(variables.$fontSize * 0.5);
+    }
+}
+
+// Standard reusable elements (buttons, headers, infotext)
+.button {
+    height: 5vw;
+    display: flex;
+    align-items: center;
+    border-radius: 0.25em;
+    border: black inset 0.05em;
+    background-color: variables.$lightYellow;
+    padding: 0.2em;
+
+    img {
+        height: 5vw;
+        width: 5vw;
+    }
+}
+.button:hover {
+    background-color: variables.$pyarYellow;
+    cursor: pointer;
+}
+.button.active {
+    background-color: variables.$darkYellow;
+}
+h2, h3, h4 {
+    font-variant: small-caps;
+}
+.infoText {
+    margin-top: 0.3em;
+    font-size: 1em;
+    text-align: center;
+    color: #6f6f6f;
+}
+.slider {
+    width: 25vw;
+    height: 5vw;
+}
+
+@media only screen and (min-width: variables.$mobileWidth) {
+    .button {
+        height: 1.8em;
+        img {
+            width: 1.8em;
+            height: 1.8em;
+        }
+    }
+    .slider {
+        width: 15vw;
+        height: 2.5vw;
+        align-self: flex-end;
+        margin-top: -0.2em;
+    }
+}
+
+// workspace
+#workspace {
+    display: inline-block;
+    position: relative;
+    margin: auto;
+    width: variables.$mobileCanvasSize;
+    height: variables.$mobileCanvasSize;
+    background-color: white;
+    margin: 0.5em;
+
+    canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+    }
+}
+#cursorCanvas {
+    z-index: 1000;
+}
+@media only screen and (min-width: variables.$mobileWidth) {
+    #workspace {
+        width: variables.$canvasSize;
+        height: variables.$canvasSize;
+    }
+}
+
+// Prompt area
+#prompt {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    border: 0.05em inset variables.$pyarYellow;
+    border-radius: 0.5em;
+    margin: 0.75em;
+    padding: 0.75em 0.75em 1.8em;
+    width: calc(variables.$mobileCanvasSize * 0.9);
+}
+#promptField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 3em;
+    min-width: 60%;
+    max-width: 95%;
+    border-radius: 0.5em;
+    border: dashed 1px variables.$darkColor;
+    margin: 1.8em 0;
+
+    p {
+        font-size: 1em;
+        background-color: white;
+        text-align: center;
+        margin-top: -0.7em;
+        padding: 0 0.3em;
+    }
+}
+#realPrompt {
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    margin: 0 1em;
+    height: 3.3em;
+    p {
+        text-align: center;
+    }
+}
+#promptButtons {
+    display: flex;
+    justify-content: center;
+    button {
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+    }
+    h3 {
+        margin-left: 0.2em;
+        margin-right: 0.2em;
+        font-size: 1.4em;
+    }
+}
+#promptRequest > img {
+    transition: all 0.5s;
+}
+#promptRequest:hover > img {
+    transform: rotate(-180deg);
+}
+
+@media only screen and (min-width: variables.$mobileWidth) {
+    #prompt {
+        width: variables.$canvasSize;
+        background-color: unset;
+        border: none;
+        margin: 0;
+        padding: 0.5em 0.75em 1.8em;
+    }
+    #promptField {
+        min-height: 10vh;
+        p {
+            background-color: #f3f3f3;
+        }
+    }
+    #realPrompt {
+        font-size: 1.2em;
+        height: calc(10vh - 0.7em);
+        
+    }
+}
+
+// Menu formatting
+#mainMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+#advancedMenu {
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 1em;
+    border: 0.05em inset variables.$pyarYellow;
+    background-color: white;
+    border-radius: 0.5em;
+    margin: 0.5em 0.75em;
+    width: 85vw;
+    align-items: center;
+
+    h2, h4 {
+        margin: 0.75em;
+        font-size: 1.25em;
+        text-align: center;
+        color: #6f6f6f;
+        font-weight: bold;
+    }
+    .desktop {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: variables.$mobileWidth) {
+    #advancedMenu {
+        display: flex;
+    }
+    .menu-item {
+        flex-direction: column;
+        width: 18vw;
+        border-color: variables.$darkColor;
+        margin: 0.5em 1em 0;
+
+        h2 {
+            font-size: 1em;
+            margin: 0;
+        }
+        .desktop {
+            display: block;
+        }
+        h4 {
+            font-variant: normal;
+            font-size: 0.95em;
+            font-weight: normal;
+        }
+    }
+}
+
+// Brush selection
+#brushSelector {
+    h2::before {
+        content: "brush:";
+    }
+    h4::before {
+        content: "size:";
+    }
+}
+#penOptions, #penSize {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0.75em;
+    justify-content: flex-start;
+    align-items: center;
+}
+#penOptions {
+    .button {
+        margin-right: 1.5em;
+    }
+}
+#sizeSlider-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+#sizeModifier {
+    font-size: 0.8em;
+}
+@media only screen and (min-width: variables.$mobileWidth) {   
+    #brushSelector {
+        h2::before {
+            content: "brush selector";
+        }
+        h4::before {
+            content: "brush size:";
+        }
+    }
+    #penOptions {
+        justify-content: space-around;
+        width: 80%;
+    }
+    #penSize {
+        margin-bottom: 1.5em;
+        display: block;
+    }
+}
+
+// Color selection
+#colorSelector {
+    h2::before {
+        content: "";
+    }
+    h2 {
+        display: none;
+    }
+}
+#colorWheel {
+    width: 28vw;
+    height: 28vw;
+    margin: 0.5em auto 0.5;
+}
+
+#colorOptions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 2vw;
+    margin-right: 4vw;
+
+    .slider {
+        width: 35vw;
+        height: 7vw;
+        align-self: flex-end;
+        z-index: 2;
+    }
+    h4 {
+        margin-bottom: -0.5em;
+    }
+}
+
+@media only screen and (min-width: variables.$mobileWidth) {   
+    #colorSelector {
+        h2::before {
+            content: "color selector";
+        }
+        h2 {
+            display: block;
+        }
+    }
+    #colorWheel {
+        width: 12.5vw;
+        height: 12.5vw;
+        margin: 1em auto 0;
+    }
+    #colorOptions {
+        margin: 0.5em 0;
+        width: 16vw;
+
+        .slider {
+            width: 15vw;
+            height: 2.5vw;
+            align-self: flex-end;
+            margin-top: -0.2em;
+        }
+    }
+    #colorCodes {
+        display: grid;
+        grid-template-columns: repeat(6, auto);
+        justify-content: space-evenly;
+        justify-items: end;
+        margin-bottom: 0.5em;
+        width: 75%;
+
+        span {
+            font-size: 0.7em;
+        }
+        .value {
+            justify-self: center;
+        }
+    }
+}
+
+// Advanced menu: only visible on desktop
+@media only screen and (min-width: variables.$mobileWidth) {   
+    #example {
+        height: 15vw;
+        width: 15vw;
+        background-color: white;
+        position: relative;
+        margin-top: 1em;
+    }
+    #collageExample, #collageSelector {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+    }
+    #collageSelector {
+        z-index: 1;
+    }
+    #cropZone {
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        justify-items: start;
+        margin: 0.8em 0;
+    }
+    #collageSlider {
+        width: 10vw;
+        height: 2vw;
+    }
+    #cropZone h4 {
+        justify-self: end;
+        font-size: 0.9em;
+    }
+    #crop {
+        margin-left: 1vw;
+    }
+    #newImage {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+    }
+    #layers {
+        display: flex;
+        flex-direction: column;
+        margin-top: 1em;
+        border: 0.05em solid variables.$darkColor;
+        width: 70%;
+    }
+    .layer {
+        text-align: center;
+        padding: 0.1em;
+    }
+    .selected {
+        background-color: variables.$pyarYellow;
+    }
+    #addLayer {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        border-radius: 0;
+        background-color: white;
+        border-top: none;
+        height: 1em;
+        padding: 0.35em;
+    }
+    #addLayer:hover {
+        background-color: variables.$pyarYellow;
+    }
+    #saveMenu {
+        display: flex;
+        justify-content: center;
+        margin-top: 0.75em;
+        font-size: 1.1em;
+
+        img {
+            width: 1.1em;
+            height: 1.1em;
+            margin-right: 0.25em;
+        }
+        .button {
+            margin: 0 0.5em;
+        }
+    }
+}

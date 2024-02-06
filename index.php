@@ -1,6 +1,5 @@
 <?php session_start(); ?>
 <?php
-
 // Calculate folder size (as security)
 // https://gist.github.com/eusonlito/5099936
 function folderSize($dir) {
@@ -33,7 +32,6 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
     //3. CHECK IF FOLDER IS FULL
     $folderSize = folderSize("output")/(1024*1024);
     if ($folderSize > 500){
-        $_SESSION["gamestate"] = "error";
         $_SESSION["error"] = "Image directory is full: contact administrator.";
     } else {
         //4. RETRIEVE IMAGE & SAVE TO DIR
@@ -46,25 +44,25 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
         $success = file_put_contents($file, $data);
         
         // 5. POST TO DB
-        $query = $conn->query(
-            "INSERT INTO pyarList(username, prompt)
-            VALUES ('" . $usernameNew . "', '" . $prompt . "')"
-        );
-        if ($query === TRUE){
-            // 6. SAVE VALUES TO SESSION
-            $_SESSION["username"] = $username;
-            $_SESSION["usernameNew"] = $usernameNew;
-            $_SESSION["gamestate"] = "end";
-        } else {
-            $_SESSION["gamestate"] = "error";
-            $_SESSION["error"] = "Error adding record: " . $conn->error;
+        include "connection.php";
+        try {
+            $conn = new mysqli($servername, $username, $password, $database);
+            $query = $conn->query(
+                "INSERT INTO pyarList(username, prompt)
+                VALUES ('" . $usernameNew . "', '" . $prompt . "')"
+            );
+            if ($query === FALSE){
+                $_SESSION["error"] = "Error adding record: " . $conn->error;
+            }
+            $conn->close();
+        } catch (Exception $e){
+            $_SESSION["error"] = "Error adding record: " . $e->getMessage();
         }
     }
     // REDIRECT TO GET
     header("Location: index.php", true, 303);
     exit();
 }
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -78,11 +76,13 @@ $conn->close();
     <meta name="robots" content="index, follow">
     <meta name="author" content="Niels Van Damme">
     <title>Prove you're a robot - the game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/main.css">
 </head>
+
 <body>
     <main>
-        <segment id="prompt">
+
+        <section id="prompt">
             <div id="promptField">
                 <p>a human has prompted you to draw</p>
                 <div id="realPrompt">
@@ -97,16 +97,18 @@ $conn->close();
                     <h3>submit image</h3>
                 </button>
             </div>
-        </segment>
-        <segment id="workspace">
+        </section>
+
+        <section id="workspace">
             <canvas id="cursorCanvas" class="canvas"></canvas>
             <canvas id="canvas-layer1" class="canvas" style="z-index: 1;"></canvas>
-            <canvas id="final-canvas" class="canvas" style="z-index: 1;"></canvas>
-        </segment>
-        <segment id="mainMenu">
-            <div id="brushSelector" class="menu-item">
-                <h2>brush selector</h2>
-                <p class="infoText">Choose between the pencil, line and eraser tool. Desktop users can also shortcut to the collage tool.</p>
+            <canvas id="finalCanvas" class="canvas" style="z-index: 1;"></canvas>
+        </section>
+
+        <aside id="mainMenu">
+            <section id="brushSelector" class="menu-item">
+                <h2></h2>
+                <p class="infoText desktop">Choose between the pencil, line and eraser tool. Desktop users can also shortcut to the collage tool.</p>
                 <div id="penOptions">
                     <button id="pencil" class="button">
                         <img src="assets/pencil.svg">
@@ -117,21 +119,22 @@ $conn->close();
                     <button id="eraser" class="button">
                         <img src="assets/eraser.svg">
                     </button>
-                    <button id="collage" class="button">
+                    <button id="collage" class="button desktop">
                         <img src="assets/collage.svg">
                     </button>
                 </div>
                 <div id="penSize">
-                    <h4>brush size:</h4>
+                    <h4></h4>
                     <div id="sizeSlider-container">
                         <canvas id="sizeSlider" class="slider"></canvas>
-                        <span id="sizeModifier"></span>
+                        <span id="sizeModifier" class="desktop"></span>
                     </div>
                 </div>
-            </div>
-            <div id="colorSelector" class="menu-item">
-                <h2>color selector</h2>
-                <p class="infoText">Mix the colors you want and apply them to your brush.</p>
+            </section>
+
+            <section id="colorSelector" class="menu-item">
+                <h2></h2>
+                <p class="infoText desktop">Mix the colors you want and apply them to your brush.</p>
                 <canvas id="colorWheel"></canvas>
                 <div id="colorOptions">
                     <h4>saturation:</h4>
@@ -141,7 +144,7 @@ $conn->close();
                     <h4>opacity:</h4>
                     <canvas id="opacity" class="slider"></canvas>
                 </div>
-                <div id="colorCodes">
+                <div id="colorCodes" class="desktop">
                         <span class="label">h:</span>
                         <span class="value" id="hue"></span>
                         <span class="label">s:</span>
@@ -155,10 +158,11 @@ $conn->close();
                         <span class="label">b:</span>
                         <span class="value" id="blue"></span>
                 </div>
-            </div>
-        </segment>
-        <segment id="advancedMenu">
-            <div id="collageTool" class="menu-item">
+            </section>
+        </aside>
+        
+        <aside id="advancedMenu" class="desktop">
+            <section id="collageTool" class="menu-item">
                 <h2>collage selector</h2>
                 <p class="infoText">Upload an image to paint it on the canvas. Max file size is 2MB, square images are advised.</p>
                 <div id="example">
@@ -177,134 +181,123 @@ $conn->close();
                     <h3>select image</h3>
                 </label>
                 <input type="file" id="collageButton" name="collage" accept="image/png, image/jpg, image/jpeg, image/svg" style="display: none;">
-            </div>
-            <div id="layerSelector" class="menu-item">
+            </section>
+            <section id="layerSelector" class="menu-item">
                 <h2>layer selector</h2>
                 <p class="infoText">Add layers to facilitate drawing. Up to 6 layers can be added.</p>
                 <div id="layers">
                     <span id="layer1" class="selected layer">layer 1</span>
                 </div>
                 <button id="addLayer" class="button">+</button>
-            </div>
-        </segment>
-        
-        <!-- MOB MENU -->
-        <segment id="mobBrush" class="mobile">
-            <div class="mob-menu-item">
-                <div id="mobBrush-container">
-                    <h2>brush:</h2>
-                    <button id="pencilMob" class="button mobile">
-                        <img src="assets/pencil.svg">
-                    </button>
-                    <button id="lineMob" class="button mobile">
-                        <img src="assets/line.svg">
-                    </button>
-                    <button id="eraserMob" class="button mobile">
-                        <img src="assets/eraser.svg">
-                    </button>
-                </div>
-                <div id="mobSize-container">
-                    <h2>size:</h2>
-                    <canvas id="mobSizeSlider"></canvas>
-                    <span id="mobSizeModifier"></span>
-                </div>
-            </div>
-        </segment>
-        <segment id="mobColor" class=mobile>
-            <div class="mob-menu-item">
-                <canvas id="mobColorWheel"></canvas>
-                <div id="mobColorOptions">
-                    <h2>saturation:</h2>
-                    <canvas id="mobSaturation" class="slider"></canvas>
-                    <h2>lightness:</h2>
-                    <canvas id="mobLightness" class="slider"></canvas>
-                    <h2>opacity:</h2>
-                    <canvas id="mobOpacity" class="slider"></canvas>
-                </div>
-            </div>
-        </segment>
-        
-        <!-- OVERLAYS -->
-        <segment id="overlay" class="overlay"></segment>
-        <segment id="evaluating" class="overlay popup">
-            <div id="logoContainer">
-                <img id="cog" src="assets/cog.svg">
-                <img id="foreground" src="assets/pyarForeground.svg">
-            </div>
-            <p id="evalText"></p>
-        </segment>
-        <segment id="captcha" class="overlay popup">
-            <img id="startLogo" src="assets/pyarLogo.svg">
-            <p id="startText">please confirm you're a robot</p>
-            <div id="captchaField">
-                <div id="captchaCheckbox">
-                    <span id></span>
-                </div>
-                <h2>i am a robot</h2>
-            </div>
-        </segment>
-        <segment id="submitMenu" class="overlay popup">
-            <button id="cancelSubmit">x</button>
-            <h1 id="submitHeader">automatic report</h1>
-            <p id="conclusion" class="infoText"></p>
-            <h2 id="previewImage">preview image:</h2>
-            <img id="finalCanvasPreview" src="assets/blank.svg">
-            <p id="submitPrompt"></p>
-            <form id="submitForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                <label for="username" id="username-container">
-                    <p>generated by</p>
-                    <input type="text" id="username" name="username" maxlength="20">
-                </label>
-                <div id="submit-container">
-                    <div class="button" id="submitImageFinal">
-                        <h3>submit to database</h3>
-                    </div>
-                    <div class="button" id="download">
-                        <img src="assets/dlBox.svg" id="dlBox">
-                        <img src="assets/dlArrow.svg" id="dlArrow">
-                    </div>
-                </div>
-                <div style="display:none;">
-                    <canvas id="downsizer"></canvas>
-                    <input type="text" id="sendPrompt" name="sendPrompt">
-                    <input type="text" id="usernameNew" name="usernameNew">
-                    <input type="submit" value="submit" id="imageFormSubmit" name="imageFormSubmit">
-                    <input type="text" id="sendImage" name="sendImage">
-                </div>
-            </form>
-            <div id="exitChoices">
-                <button class="button" onclick="window.open('output.php')">
-                    <h3>visit database</h3>
+            </section>
+            <section id="saveMenu">
+                <button class="button" id="saveButton">
+                    <img src="assets/download.svg">
+                    <h3>save</h3>
                 </button>
-                <button class="button" id="restartButton">
-                    <img src="assets/recycle.svg">
+                <button class="button" id="loadButton">
+                    <img src="assets/upload.svg">
+                    <h3>load</h3>
                 </button>
+                <input type="file" id="saveReader" style="display:none;" accept=".txt">
             </div>
-            <div id="exitChoicesFinal">
-                <button class="button" id="nextPrompt">
-                    <h3 id="nextPromptLabel">next prompt</h3>
-                </button>
-                <button class="button" id="visitDB" onclick="window.open('output.php')">
-                    <h3>visit database</h3>
-                </button>
-            </div>
-        </segment>
+        </aside>
     </main>
-    <script src="/demo/prompt_builder/assets/promptGenerator/commons.js"></script>
-    <script src="/demo/prompt_builder/assets/promptGenerator/promptGenerator.js"></script>
-    <?php 
-        $phpVar = (isset($_SESSION["gamestate"]) ? $_SESSION["gamestate"] : "start");
-        $username = (isset($_SESSION["username"]) ? $_SESSION["username"] : "anonymous");
-        $usernameNew = (isset($_SESSION["usernameNew"]) ? $_SESSION["usernameNew"] : "anonymous");
-        $error = (isset($_SESSION["error"]) ? $_SESSION["error"] : "none");
+
         
-        echo "<script>let gamestate = '" . $phpVar . "', username = '" . $username . "', usernameNew = '" . $usernameNew . "', phpError = '" . $error . "';</script>";
+    <!-- Dialogs -->
+    <dialog id="evaluating">
+        <div id="logoContainer">
+            <img id="cog" src="assets/cog.svg">
+            <img id="foreground" src="assets/pyarForeground.svg">
+        </div>
+        <p id="evalText"></p>
+    </dialog>
+
+    <dialog id="captcha">
+        <img class="logo" src="assets/pyarLogo.svg">
+        <p>
+            Welcome to Prove you're a Robot&#x2122! 
+            <br>
+            Please check the box below to confirm you're a robot.
+        </p>
+        <div id="captchaField">
+            <span id="topMask"></span>
+            <span id="bottomMask"></span>
+            <div id="captchaCheckbox">
+                <span id></span>
+            </div>
+            <h2>i am a robot</h2>
+        </div>
+    </dialog>
+
+    <dialog id="feedback">
+        <img class="logo" src="assets/pyarLogo.svg">
+        <div id="feedbackField"></div>
+        <button id="feedbackConfirm" class="button"></button>
+    </dialog>
+
+    <dialog id="submitMenu">
+        <img class="logo" src="assets/pyarLogo.svg">
+        <button id="cancelSubmit">x</button>
+        <h2>automatic report</h2>
+        <p id="conclusion"></p>
+        <h3>your creation:</h3>
+        <img id="finalCanvasPreview" src="assets/blank.svg">
+        <p id="submitPrompt"></p>
+        <form id="submitForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <label for="username" id="username-container">
+                <p>generated by</p>
+                <input type="text" id="username" name="username" maxlength="20">
+            </label>
+            <div id="submit-container">
+                <button type="button" class="button" id="submitImageFinal">
+                    <h3>submit to database</h3>
+                </button>
+                <button type="button" class="button" id="download">
+                    <img src="assets/dlBox.svg" id="dlBox">
+                    <img src="assets/dlArrow.svg" id="dlArrow">
+                </button>
+            </div>
+            <!-- secret data sent when submitting! -->
+            <div style="display:none;">
+                <canvas id="downsizer"></canvas>
+                <input type="text" id="sendPrompt" name="sendPrompt">
+                <input type="text" id="usernameNew" name="usernameNew">
+                <input type="submit" value="submit" id="imageFormSubmit" name="imageFormSubmit">
+                <input type="text" id="sendImage" name="sendImage">
+            </div>
+        </form>  
+    <dialog>
+    
+    <!-- log php error -->
+    <?php 
+        if (isset($_SESSION["error"])){
+            echo "<script>let phpError = '" . $_SESSION["error"] . "';</script>";
+        } else {
+            echo "<script>let phpError = null;</script>";
+        }
     ?>
-    <script src="js/tools.js"></script>
-    <script src="js/listeners.js"></script>
-    <script src="js/mobile.js"></script>
-    <script src="js/dialogue.js"></script>
-    <script src="js/menu.js"></script>
-    <script src="js/captcha.js"></script>
+
+    <!-- link to prompt generator -->
+    <script src="https://www.planetegem.be/demo/prompt_builder/assets/promptGenerator/commons.js"></script>
+    <script src="https://www.planetegem.be/demo/prompt_builder/assets/promptGenerator/promptGenerator.js"></script>
+
+    <!-- main gameplay -->
+    <script src="js/drawMethods/commons.js"></script>
+    <script src="js/drawMethods/colorwheel.js"></script>
+    <script src="js/drawMethods/pen.js"></script>
+    <script src="js/drawMethods/layer.js"></script>
+    <script src="js/drawMethods/collage.js"></script>
+    <script src="js/drawMethods/canvas.js"></script>
+    <script src="js/drawMethods/listeners.js"></script>
+    <script src="js/drawMethods/save.js"></script>
+
+    <!-- Dialogs and gameflow -->
+    <script src="js/resources.js"></script>
+    <script src="js/dialogs.js"></script>
+    <script src="js/main.js"></script>
+    
+    
 </body>
-<?php unset($_SESSION["gamestate"]); ?>
+<?php unset($_SESSION["error"]); ?>

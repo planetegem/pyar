@@ -1,0 +1,376 @@
+@use 'variables';
+
+dialog:not([open]) { 
+    display: none !important; 
+}
+dialog {
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+    padding: 0.5em;
+    background-color: white;
+    border: solid 0.3em variables.$pyarYellow;
+    border-radius: 1.5em;
+    z-index: 5000;
+    font-size: max(16px, 1.25vw);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    outline: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+dialog::backdrop {
+    background-color: variables.$lightYellow;
+    opacity: 0.99;
+    transition: opacity 1s ease-in-out;
+}
+
+// Loading dialog
+#logoContainer {
+    position: relative;
+    width: min(75vw, 55vh);
+    height: min(75vw, 55vh);
+
+    img {
+        position: absolute;
+        width: 95%;
+        top: 0; left: 0; right: 0; bottom: 0;
+        margin: auto;
+    }
+}
+#evalText {
+    font-size: 1.4em;
+    font-variant: small-caps;
+    margin-bottom: 1em;
+    text-shadow:
+            -1px -1px 0 variables.$pyarYellow,  
+            1px -1px 0 variables.$pyarYellow,
+            -1px 1px 0 variables.$pyarYellow,
+            1px 1px 0 variables.$pyarYellow;
+}
+
+
+// Captcha dialog
+#captcha {
+    max-height: max-content;
+    width: min(85vw, 65vh);
+
+    .logo {
+        width: 7.5em;
+        height: 7.5em;
+        margin: 1em auto;
+    }
+
+    p {
+        font-size: 0.90em;
+        text-align: center;
+        margin: 0 1em 0.5em;
+        line-height: 1.2em;
+    }
+    h2 {
+        margin: 0;
+        z-index: 10;
+        font-variant: small-caps;
+        text-shadow:
+            -1px -1px 0 variables.$pyarYellow,  
+            1px -1px 0 variables.$pyarYellow,
+            -1px 1px 0 variables.$pyarYellow,
+            1px 1px 0 variables.$pyarYellow;
+    }
+}
+#captchaCheckbox {
+    width: 1.5em;
+    height: 1.5em;
+    position: relative;
+    margin: 0 0.5em;
+    z-index: 10;
+
+    span {
+        display: block;
+        width: 0.75em;
+        height: 0.75em;
+        border: solid 0.2em variables.$darkColor;
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        margin: auto;
+    }
+    img {
+        display: block;
+        width: 1.5em;
+        height: 1.5em;
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        margin: auto;
+    }
+}
+#captchaCheckbox:hover > span {
+    border-color: black;
+    cursor: pointer;
+}
+#captchaField {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    border: solid 0.1em variables.$darkColor;
+    border-radius: 0.5em;
+    margin: 0.25em auto 1.25em;
+    width: 80%;
+    padding: 1em;
+    font-size: 1.3em;
+    transition: max-height 0.2s ease-in;
+    position: relative;
+}
+#topMask, #bottomMask {
+    background-color: white;
+    position: absolute;
+    width: 0; height: 0.15em;
+    z-index: 5;
+}
+#topMask {
+    top: -0.1em;
+    left: 0.1em;
+}
+#bottomMask {
+    bottom: -0.1em;
+    right: 0;
+}
+#captchaField.unfolded {
+    padding: 0.1em;
+    margin: 0 auto;
+    border: none;
+    width: 95%;
+    font-size: 1em;
+}
+
+#captchaContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    p {
+        font-size: 0.90em;
+        text-align: center;
+        margin: 0 1em 0.5em;
+        line-height: 1.2em;
+    }
+    h3 {
+        font-size: 1.1em;
+        font-variant: small-caps;
+        text-shadow:
+            -1px -1px 0 variables.$pyarYellow,  
+            1px -1px 0 variables.$pyarYellow,
+            -1px 1px 0 variables.$pyarYellow,
+            1px 1px 0 variables.$pyarYellow;
+    }
+
+    div {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        gap: 0.1em 0.1em;
+        margin: 0.25em 0 0.75em;
+    }
+
+    .button {
+        min-width: 35%;
+        font-variant: small-caps;
+        font-size: 1.15em;
+        margin-bottom: 0.75em;
+        justify-content: center;
+        height: 1.4em;
+    }
+}
+.profession {
+    width: 100%;
+    max-width: 15vh;
+    max-height: 15vh;
+    border: 0.15em solid white;
+    opacity: 0.5;
+    margin: auto;
+    transition: all 0.1s ease-in-out;
+}
+.profession.selected {
+    opacity: 1;
+    border-color: variables.$pyarYellow;
+}
+.profession:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+.button[disabled] {
+    background-color: variables.$darkColor;
+    opacity: 0.6;
+}
+.button[disabled]:hover {
+    cursor: not-allowed;
+    background-color: variables.$darkColor;
+    opacity: 0.6;
+}
+
+// Feedback
+#feedback {
+    max-height: max-content;
+    width: min(85vw, 70vh);
+    text-align: center;
+
+    .logo {
+        width: 6em;
+        height: 6em;
+        margin: 0.5em auto;
+    }
+    h2 {
+        font-size: 1.4em;
+        margin-bottom: 0.5em;
+        display: block;
+    }
+    h2, h3 {
+        text-shadow:
+            -1px -1px 0 variables.$pyarYellow,  
+            1px -1px 0 variables.$pyarYellow,
+            -1px 1px 0 variables.$pyarYellow,
+            1px 1px 0 variables.$pyarYellow;
+    }
+    p {
+        margin: 0 0.5em;
+    }
+    .button {
+        font-variant: small-caps;
+        padding: 0 0.5em;
+        font-size: 1.1em;
+        margin: 1.5em;
+        justify-content: center;
+        height: 1.4em;
+    }
+    #dbButton {
+        margin: 1.5em auto -1em;
+    }
+}
+
+// Submit Dialog
+#submitMenu {
+    max-height: max-content;
+    width: min(85vw, 65vh);
+
+    .logo {
+        width: 4.5em;
+        height: 4.5em;
+        margin: 0.5em auto;
+    }
+
+    h2 {
+        font-size: 1.4em;
+        margin-bottom: 0.5em;
+        display: block;
+        text-shadow:
+            -1px -1px 0 variables.$pyarYellow,  
+            1px -1px 0 variables.$pyarYellow,
+            -1px 1px 0 variables.$pyarYellow,
+            1px 1px 0 variables.$pyarYellow;
+    }
+
+    p {
+        margin: 0 0.5em;
+        text-align: center;
+    }
+    #conclusion {
+        margin-bottom: 0.75em;
+    }
+}
+
+#cancelSubmit {
+    position: absolute;
+    font-size: 1.4em;
+    top: 0.5em;
+    right: 1em;
+    color: #9f9f9f;
+    font-weight: bold;
+}
+#cancelSubmit:hover {
+    color: #666666;
+    cursor: pointer;
+}
+
+#finalCanvasPreview {
+    width: 30vh;
+    height: 30vh;
+    margin-bottom: 0.5em;
+}
+#submitPrompt {
+    font-size: 1.1em;
+    max-width: 80%;
+    text-align: center;
+}
+#submitForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-top: 0.5em;
+}
+#username-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 60%;
+    border-radius: 0.5em;
+    border: dashed 1px variables.$darkColor;
+    position: relative;
+    margin: 0.8em 0;
+
+    p {
+        position: absolute;
+        transform: translateY(-0.70em);
+        background-color: white;
+        padding: 0 0.5em;
+    }
+}
+#username {
+    border: none;
+    text-align: center;
+    width: 100%;
+    font-size: 1.1em;
+    padding: 0.5em 0;
+    border-radius: 0.5em;
+}
+#submit-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25em;
+
+    .button {
+        height: 1.6em;
+        margin: 0 0.25em;
+    }
+    h3 {
+        margin-left: 0.25em;
+        margin-right: 0.25em;
+    }
+}
+#download {
+    position: relative;
+    width: 1.6em;
+
+    img {
+        position: absolute;
+        top: 0; bottom: 0; right: 0; left: 0;
+        margin: auto;
+        width: 1.5rem;
+        height: 1.5em;
+    }
+}
+#download:hover > #dlArrow {
+    animation: download 1s infinite;
+}
+@keyframes download {
+    0% {transform: translateY(-0.2em);}
+    100% {transform: translateY(0);}
+}
+#dlArrow {
+    z-index: 2006;    
+}
+
