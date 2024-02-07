@@ -170,9 +170,7 @@ collageSizeSlider.addEventListener("mousedown", (e) => {
     
     size.temp = calculatePosition(mouseX, collageSizeSlider);
     drawCollageSizeSlider();
-    drawSizeSlider();
-    quickSave();
-    
+    drawSizeSlider();    
 });
 collageSizeSlider.addEventListener("touchstart", (e) => {
     let touchX = e.changedTouches[0].clientX - collageSizeSlider.getBoundingClientRect().left;
@@ -186,7 +184,6 @@ collageSizeSlider.addEventListener("touchstart", (e) => {
     size.temp = calculatePosition(touchX, collageSizeSlider);
     drawCollageSizeSlider();
     drawSizeSlider();
-    
 }, { passive: false });
 
 

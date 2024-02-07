@@ -81,7 +81,10 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
 
 <body>
     <main>
+        <!-- temporary overlay while doc is loading -->
+        <div id="overlay" style="background-color: #fff8a3; position: fixed; z-index: 50000; width: 100%; height: 100%; opacity: 0.9;"></div>
 
+        <!-- main section: prompt & canvas -->
         <section id="prompt">
             <div id="promptFieldContainer">
                 <span id="promptIncoming">
@@ -112,6 +115,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
             <canvas id="finalCanvas" class="canvas" style="z-index: 1;"></canvas>
         </section>
 
+        <!-- Main menu, present both in mobile & desktop -->
         <aside id="mainMenu">
             <section id="brushSelector" class="menu-item">
                 <h2></h2>
@@ -167,7 +171,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
                 </div>
             </section>
         </aside>
-        
+        <!-- Advanced menu, only for desktop -->
         <aside id="advancedMenu" class="desktop">
             <section id="collageTool" class="menu-item">
                 <h2>collage selector</h2>

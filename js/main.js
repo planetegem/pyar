@@ -11,6 +11,7 @@ window.addEventListener("load", () => {
     if (phpError !== null){
         gamestate = "error";
     }
+    document.getElementById("overlay").remove();
 
     let sessionUsername = sessionStorage.getItem("username");
     username = sessionUsername ?? "anonymous";
@@ -30,7 +31,7 @@ const promptIncoming = document.getElementById("promptIncoming");
 const promptField = document.getElementById("promptField");
 
 function startPromptRequest(){
-    getPrompt();
+    //getPrompt();
 
     promptReceived = true;
     animationStart = Date.now();
@@ -218,6 +219,8 @@ document.getElementById("submitImageFinal").addEventListener("click", () => {
     }
     document.getElementById("usernameNew").value = username;
     sessionStorage.setItem("usernameNew", username);
+    gamestate = "end";
+    sessionStorage.setItem("gamestate", gamestate);
 
     document.getElementById("imageFormSubmit").click();
     clearSave();

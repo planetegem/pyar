@@ -31,7 +31,8 @@
 <main>
     <segment id="list">
     <?php
-
+    include "connection.php";
+    $conn = new mysqli($servername, $username, $password, $database);
     
     $sql = "SELECT * FROM pyarList ORDER BY id DESC LIMIT " . $offset . ", " . $limit;
     $result = $conn->query($sql);
