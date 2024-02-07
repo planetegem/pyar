@@ -4,8 +4,6 @@ let gamestate, username, usernameNew;
 
 // WHEN EVERYTHING HAS LOADED, START GAME
 window.addEventListener("load", () => {
-    // getPrompt();
-
     // Check session storage
     let sessionGamestate = sessionStorage.getItem("gamestate");
     gamestate = sessionGamestate ?? "start";
@@ -20,10 +18,56 @@ window.addEventListener("load", () => {
     let sessionUsernameNew = sessionStorage.getItem("usernameNew");
     usernameNew = sessionUsernameNew ?? "anonymous";
 
+    // Check if canvas needs to be quickloaded
+    quickLoad();
+
     evaluate(1000);
 });
 
-// 1. GAMESTATE DECISION TREE
+// PROMPT LOADER
+let promptReceived = false;
+const promptIncoming = document.getElementById("promptIncoming");
+const promptField = document.getElementById("promptField");
+
+function startPromptRequest(){
+    getPrompt();
+
+    promptReceived = true;
+    animationStart = Date.now();
+    promptField.style.visibility = "hidden";
+    promptField.style.scale = 0;
+    promptIncoming.style.visibility = "visible";
+
+    // Make buttons inactive
+    document.getElementById("promptRequest").disabled = true;
+    document.getElementById("submitButton").disabled = true;
+
+    animatePrompt();
+}
+
+function animatePrompt(){
+    let runtime = Date.now() - animationStart,
+        max = 3000, step = 400;
+
+    if (Math.round(runtime/step) % 2 === 0){
+        promptIncoming.style.visibility = "hidden";
+    } else {
+        promptIncoming.style.visibility = "visible";
+    }
+    
+    if (runtime < max || constructingPrompt){
+        currentAnimationFrame = requestAnimationFrame(animatePrompt);
+    } else {
+        cancelAnimationFrame(currentAnimationFrame);
+        promptField.style.visibility = "visible";
+        promptField.style.scale = 1;
+        promptIncoming.style.visibility = "hidden";
+        document.getElementById("promptRequest").disabled = false;
+        document.getElementById("submitButton").disabled = false;
+    }
+}
+
+// GAMESTATE DECISION TREE
 function stateChange(){
     // First close all dialogs
     for (let dialog of dialogs){
@@ -57,6 +101,12 @@ function stateChange(){
         case "submit":
             document.getElementById("submitMenu").showModal();
             prepareSubmission();
+            break;
+
+        case "drawing":
+            if (promptReceived === false){
+                startPromptRequest();
+            }
             break;
     }    
 }
@@ -170,19 +220,21 @@ document.getElementById("submitImageFinal").addEventListener("click", () => {
     sessionStorage.setItem("usernameNew", username);
 
     document.getElementById("imageFormSubmit").click();
+    clearSave();
 
     constructingPrompt = true;
     evaluate(1000);
 });
 
 
-
+// Request new prompt 
 document.getElementById("promptRequest").addEventListener("click", () => {
-    document.getElementById("targetField").innerHTML = "prompt incoming";
-    getPrompt();
     resetLayers();
+    clearSave();
+    startPromptRequest();
 });
 
+// Download image (possible in submit menu)
 document.getElementById("download").addEventListener("click", () => {
     let download = document.createElement("a");
     

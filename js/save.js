@@ -79,6 +79,56 @@ function decodeSave(string){
         }
     }
 }
+
+// Quicksave & quickload functions
+function quickLoad(){
+    if (sessionStorage.getItem("layers") !== null){
+        let layers = JSON.parse(sessionStorage.getItem("layers"));
+        for(let i = 0; i < layers.length; i++){
+            let canvas = document.getElementById(drawTool.layer),
+                ctx = canvas.getContext("2d"),
+                newLayer = new Image();
+             
+            newLayer.onload = () => {
+                ctx.drawImage(newLayer, 0, 0, canvas.width, canvas.height);
+            }
+            newLayer.src = layers[i];
+             
+            if (i === layers.length - 1){
+                continue;
+            } else {
+                addLayer();
+            }
+        }
+    }
+    if (sessionStorage.getItem("prompt") !== null){
+        document.getElementById("targetField").innerHTML = sessionStorage.getItem("prompt");
+        promptReceived = true;
+    } else {
+        promptReceived = false;
+    }
+}
+let lastSave = Date.now();
+function quickSave(){
+    // Check if last save was not too recent
+    if (Date.now() - lastSave > 20000){
+        lastSave = Date.now();
+
+        let layers = document.querySelectorAll(".canvas.new"), layerArray = [];
+
+        for (let i = 0; i <= layers.length; i++){
+            let pngCopy = document.getElementById("canvas-layer" + (i + 1)).toDataURL("image/png");
+            layerArray.push(pngCopy);
+        }
+        sessionStorage.setItem("layers", JSON.stringify(layerArray));
+        sessionStorage.setItem("prompt", document.getElementById("targetField").innerHTML);
+        console.log("quicksave performed");
+    }
+}
+function clearSave(){
+    sessionStorage.removeItem("layers");
+    sessionStorage.removeItem("prompt");
+}
  
  
  

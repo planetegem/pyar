@@ -83,10 +83,17 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
     <main>
 
         <section id="prompt">
-            <div id="promptField">
-                <p>a human has prompted you to draw</p>
-                <div id="realPrompt">
-                    <p>"<span id="targetField">prompt incoming</span>"</p>
+            <div id="promptFieldContainer">
+                <span id="promptIncoming">
+                    <img src="assets/warning.svg">
+                    <h2>PROMPT INCOMING</h2>
+                    <img src="assets/warning.svg">
+                </span>
+                <div id="promptField">
+                    <p>a human has prompted you to draw</p>
+                    <div id="realPrompt">
+                        <p>"<span id="targetField">prompt incoming</span>"</p>
+                    </div>
                 </div>
             </div>
             <div id="promptButtons">
@@ -169,13 +176,17 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
                     <img id="collageExample" src="assets/blank.svg">
                     <canvas id="collageSelector"></canvas>
                 </div>
-                <div id="cropZone">
+                <div id="collageOptions">
                     <label for="crop">
-                        <h4>crop image:</h4>
+                        <h4>crop:</h4>
                     </label>
-                    <input type="checkbox" id="crop" name="crop">
-                    <h4>crop size:</h4>
                     <canvas id="collageSlider"></canvas>
+                    <input type="checkbox" id="crop" name="crop">
+                    <label>
+                        <h4>scale:</h4>
+                    </label>
+                    <canvas id="collageSizeSlider"></canvas>
+                    <span id="collageSizeModifier"></span>
                 </div>
                 <label id="newImage" for="collageButton" class="button">
                     <h3>select image</h3>
@@ -291,13 +302,12 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
     <script src="js/drawMethods/collage.js"></script>
     <script src="js/drawMethods/canvas.js"></script>
     <script src="js/drawMethods/listeners.js"></script>
-    <script src="js/drawMethods/save.js"></script>
 
     <!-- Dialogs and gameflow -->
     <script src="js/resources.js"></script>
     <script src="js/dialogs.js"></script>
     <script src="js/main.js"></script>
-    
-    
+    <script src="js/save.js"></script>
+
 </body>
 <?php unset($_SESSION["error"]); ?>

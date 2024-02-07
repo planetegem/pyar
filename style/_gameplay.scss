@@ -118,16 +118,23 @@ h2, h3, h4 {
     padding: 0.75em 0.75em 1.8em;
     width: calc(variables.$mobileCanvasSize * 0.9);
 }
+#promptFieldContainer {
+    min-height: 3em;
+    position: relative;
+    width: 100%;
+}
 #promptField {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 3em;
-    min-width: 60%;
-    max-width: 95%;
     border-radius: 0.5em;
     border: dashed 1px variables.$darkColor;
-    margin: 1.8em 0;
+    margin: 1.8em auto;
+    min-width: 60%;
+    max-width: 95%;
+    width: max-content;
+    scale: 0;
+    transition: scale 0.75s ease-in-out;
 
     p {
         font-size: 1em;
@@ -146,6 +153,7 @@ h2, h3, h4 {
     p {
         text-align: center;
     }
+
 }
 #promptButtons {
     display: flex;
@@ -166,6 +174,32 @@ h2, h3, h4 {
 #promptRequest:hover > img {
     transform: rotate(-180deg);
 }
+#promptIncoming {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 100%;
+    max-width: 100%;
+    font-size: 2em;
+    visibility: hidden;
+
+    img {
+        height: 1.4em;
+        width: 1.4em;
+    }
+    h2 {
+        margin: 0 0.5em;
+        text-shadow:
+        -1px -1px 0 variables.$pyarYellow,  
+        1px -1px 0 variables.$pyarYellow,
+        -1px 1px 0 variables.$pyarYellow,
+        1px 1px 0 variables.$pyarYellow;
+    }
+}
+
 
 @media only screen and (min-width: variables.$mobileWidth) {
     #prompt {
@@ -390,23 +424,27 @@ h2, h3, h4 {
     #collageSelector {
         z-index: 1;
     }
-    #cropZone {
+    #collageOptions {
         display: grid;
-        grid-template-columns: auto auto;
-        align-items: center;
+        grid-template-columns: auto auto auto;
         justify-items: start;
+        align-items: center;
         margin: 0.8em 0;
+
+        label {
+            justify-self: end;
+        }
+        h4 {
+            font-size: 0.9em;
+            margin: 0;
+        }
+        input {
+            justify-self: center;
+        }
     }
-    #collageSlider {
+    #collageSlider, #collageSizeSlider {
         width: 10vw;
         height: 2vw;
-    }
-    #cropZone h4 {
-        justify-self: end;
-        font-size: 0.9em;
-    }
-    #crop {
-        margin-left: 1vw;
     }
     #newImage {
         display: flex;

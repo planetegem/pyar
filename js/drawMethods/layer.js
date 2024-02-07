@@ -43,6 +43,7 @@ function addLayer(){
         clearSelected();
         newLayer.classList.add("selected");
         drawTool.layer = "canvas-" + newLayer.id;
+        quickSave();
     }
 }
 // Clear all layers and reset canvas

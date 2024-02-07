@@ -172,6 +172,50 @@ collageButton.addEventListener("change", (e) => {
         
         let img = document.getElementById("collageExample");
         img.src = URL.createObjectURL(collageButton.files[0]);
+        quickSave();
     };
 });
 
+// Collage size slider
+function drawCollageSizeSlider(){
+    let canvas = document.getElementById("collageSizeSlider"),
+        ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(canvas.width*sliderMin, canvas.height/2);
+    ctx.lineTo(canvas.width*sliderMax, canvas.height/2);
+    ctx.lineWidth = canvas.width*0.010;
+    ctx.strokeStyle = "#d4d4d4";
+    ctx.stroke();
+        
+    // SET SLIDER
+    let xPos = (size.temp*(sliderMax - sliderMin) + sliderMin)*canvas.width,
+        width = canvas.width*0.025,
+        height = canvas.height*0.35;
+        
+    ctx.beginPath();
+    ctx.rect(canvas.width*sliderMin, canvas.height/2 - height*0.15, xPos - canvas.width*sliderMin, height*0.30);
+    ctx.fillStyle = "#6f6f6f";
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.rect(xPos-width, canvas.height/2 - height, width*2, height*2);
+    ctx.fillStyle = "#6f6f6f";
+    ctx.fill();
+    ctx.lineWidth = canvas.width*0.005;
+    ctx.strokeStyle = pyarYellow;
+    ctx.stroke();
+    
+    // CALCULATE REAL SIZE MULTIPLIER
+    let sizeMin = 0.2, sizeMax = 8;
+    if (size.temp < 0.5){
+        size.multiplier = 2*size.temp*(1-sizeMin) + sizeMin;
+    } else if (size.temp === 0.5){
+        size.multiplier = 1;
+    } else if (size.temp > 0.5){
+        size.multiplier = 1 + (size.temp*2-1)*(sizeMax-1);
+    }
+    size.multiplier = size.multiplier.toFixed(2);
+    document.getElementById("collageSizeModifier").innerHTML = "X" + size.multiplier;
+}

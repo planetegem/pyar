@@ -10,6 +10,7 @@ function markActive(clicked){
         button.classList.remove("active");
     }
     clicked.classList.add("active");
+    quickSave();
 }
 
 // Click handlers: work for both touch and mouse

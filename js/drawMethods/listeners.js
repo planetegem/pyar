@@ -6,6 +6,7 @@ const opacitySlider = document.getElementById("opacity");
 const sizeSlider = document.getElementById("sizeSlider");
 const clipSizeSlider = document.getElementById("collageSlider");
 const collageCanvas = document.getElementById("collageSelector");
+const collageSizeSlider = document.getElementById("collageSizeSlider");
 
 // Canvas elements: cursor canvas is used as overlay to give preview of what you're drawing
 const cursorCanvasElement = document.getElementById("cursorCanvas"),
@@ -25,6 +26,7 @@ colorWheel.addEventListener("mousedown", (e) => {
         dragging.type = "colorWheel";
         angle = findAngle (mouseX, mouseY, wheel.x, wheel.y);
         drawColorWheel();
+        quickSave();
     }
 });
 colorWheel.addEventListener("touchstart", (e) => {
@@ -39,6 +41,7 @@ colorWheel.addEventListener("touchstart", (e) => {
         dragging.type = "colorWheel";
         angle = findAngle (touchX, touchY, wheel.x, wheel.y);
         drawColorWheel();
+        quickSave();
     }
 }, { passive: false });
 
@@ -55,6 +58,7 @@ saturationSlider.addEventListener("mousedown", (e) => {
     
     drawColorWheel();
     drawSlider(saturationSlider, color.s);
+    quickSave();
 });
 saturationSlider.addEventListener("touchstart", (e) => {
     let touchX = e.changedTouches[0].clientX - saturationSlider.getBoundingClientRect().left;
@@ -67,6 +71,7 @@ saturationSlider.addEventListener("touchstart", (e) => {
     color.s = calculatePosition(touchX, saturationSlider)*100;
     drawColorWheel();
     drawSlider(saturationSlider, color.s);
+    quickSave();
 }, { passive: false });
 
 lightnessSlider.addEventListener("mousedown", (e) => {
@@ -81,6 +86,7 @@ lightnessSlider.addEventListener("mousedown", (e) => {
     
     drawColorWheel();
     drawSlider(lightnessSlider, color.l);
+    quickSave();
 });
 lightnessSlider.addEventListener("touchstart", (e) => {
     let touchX = e.changedTouches[0].clientX - lightnessSlider.getBoundingClientRect().left;
@@ -93,6 +99,7 @@ lightnessSlider.addEventListener("touchstart", (e) => {
     color.l = calculatePosition(touchX, lightnessSlider)*100;
     drawColorWheel();
     drawSlider(lightnessSlider, color.l);
+    quickSave();
 }, { passive: false });
 
 opacitySlider.addEventListener("mousedown", (e) => {
@@ -106,6 +113,7 @@ opacitySlider.addEventListener("mousedown", (e) => {
     color.o = calculatePosition(mouseX, opacitySlider)*100;
     
     drawSlider(opacitySlider, color.o);
+    quickSave();
 });
 opacitySlider.addEventListener("touchstart", (e) => {
     let touchX = e.changedTouches[0].clientX - opacitySlider.getBoundingClientRect().left;
@@ -117,6 +125,7 @@ opacitySlider.addEventListener("touchstart", (e) => {
     dragging.type = "opacity";
     color.o = calculatePosition(touchX, opacitySlider)*100;
     drawSlider(opacitySlider, color.o);
+    quickSave();
 }, { passive: false });
 
 // Pen size slider
@@ -131,6 +140,8 @@ sizeSlider.addEventListener("mousedown", (e) => {
     
     size.temp = calculatePosition(mouseX, sizeSlider);
     drawSizeSlider();
+    drawCollageSizeSlider();
+    quickSave();
 });
 sizeSlider.addEventListener("touchstart", (e) => {
     let touchX = e.changedTouches[0].clientX - sizeSlider.getBoundingClientRect().left;
@@ -143,7 +154,41 @@ sizeSlider.addEventListener("touchstart", (e) => {
     
     size.temp = calculatePosition(touchX, sizeSlider);
     drawSizeSlider();
+    drawCollageSizeSlider();
+    quickSave();
 }, { passive: false });
+
+// Same size slider in the collage tool
+collageSizeSlider.addEventListener("mousedown", (e) => {
+    let mouseX = e.clientX - collageSizeSlider.getBoundingClientRect().left;
+
+    e.stopPropagation();
+    e.preventDefault();
+    
+    dragging.active = true;
+    dragging.type = "collageSize";
+    
+    size.temp = calculatePosition(mouseX, collageSizeSlider);
+    drawCollageSizeSlider();
+    drawSizeSlider();
+    quickSave();
+    
+});
+collageSizeSlider.addEventListener("touchstart", (e) => {
+    let touchX = e.changedTouches[0].clientX - collageSizeSlider.getBoundingClientRect().left;
+    
+    e.stopPropagation();
+    e.preventDefault();
+    
+    dragging.active = true;
+    dragging.type = "collageSize";
+    
+    size.temp = calculatePosition(touchX, collageSizeSlider);
+    drawCollageSizeSlider();
+    drawSizeSlider();
+    
+}, { passive: false });
+
 
 // Collage clip size slider
 clipSizeSlider.addEventListener("mousedown", (e) => {
@@ -264,6 +309,15 @@ function checkDragging(clientX, clientY){
 
             size.temp = calculatePosition(mouseX, sizeSlider);
             drawSizeSlider();
+            drawCollageSizeSlider();
+            break;
+
+        case "collageSize":
+            mouseX = clientX - collageSizeSlider.getBoundingClientRect().left;
+
+            size.temp = calculatePosition(mouseX, collageSizeSlider);
+            drawSizeSlider();
+            drawCollageSizeSlider();
             break;
 
         case "pencil":
@@ -447,6 +501,8 @@ function resizer(){
     resizeCanvas(document.getElementById("collageExample"));
     resizeCanvas(clipSizeSlider);
     drawCollageSlider();
+    resizeCanvas(collageSizeSlider);
+    drawCollageSizeSlider();
 }
 window.addEventListener("resize", resizer);
 window.addEventListener("load", resizer);

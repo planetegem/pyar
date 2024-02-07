@@ -33,7 +33,7 @@ function animateEval(){
     document.getElementById("evalText").innerHTML = text;
     document.getElementById("cog").style.transform = "rotate(" + runtime/45 + "deg)";
     
-    if (runtime < duration || constructingPrompt){
+    if (runtime < duration){
         currentAnimationFrame = requestAnimationFrame (animateEval);
     } else {
         cancelAnimationFrame(currentAnimationFrame);
@@ -48,7 +48,7 @@ const topMask = document.getElementById("topMask");
 const bottomMask = document.getElementById("bottomMask");
 
 let loadingCaptcha = false, loadingCaptchaComplete = false; // To avoid clicking more than once
-let captchaAnimationStart, captchaFieldRatio;
+let captchaFieldRatio;
 let borderOffset = 0;
 
 captchaBox.addEventListener("click", startCaptcha);
@@ -70,11 +70,11 @@ function startCaptcha(){
         image.id = "rotCaptcha";
         
         // Retain animation start time
-        captchaAnimationStart = Date.now();
+        animationStart = Date.now();
     }
 
     // Check how long animation has been running
-    let runtime = Date.now() - captchaAnimationStart;
+    let runtime = Date.now() - animationStart;
     max = 1500;
 
     // apply rotation to image
@@ -106,7 +106,7 @@ function startCaptcha(){
             document.getElementById("rotCaptcha").src = "assets/checkmark.svg";
             borderOffset = topMask.offsetHeight;
 
-            captchaAnimationStart = Date.now();
+            animationStart = Date.now();
             currentAnimationFrame = requestAnimationFrame(startCaptcha);
     } else {
         cancelAnimationFrame(currentAnimationFrame);
@@ -179,12 +179,12 @@ function createCaptcha() {
     });
 
     captchaField.classList.add("unfolded");
-    captchaAnimationStart = Date.now();
+    animationStart = Date.now();
     cancelAnimationFrame(currentAnimationFrame);
     currentAnimationFrame = requestAnimationFrame(unfold);
 }
 function unfold(){
-    let runtime = Date.now() - captchaAnimationStart,
+    let runtime = Date.now() - animationStart,
         max = 250,
         progress = runtime/max;
         height = document.getElementById("captchaContainer").scrollHeight;
@@ -212,7 +212,7 @@ function countCaptcha(){
 const feedbackField = document.getElementById("feedbackField"),
       feedbackButton = document.getElementById("feedbackConfirm");
 feedbackButton.addEventListener("click", () => {
-    gamestate = "draw";
+    gamestate = "drawing";
     sessionStorage.removeItem("tutorial");
     stateChange();
 });
