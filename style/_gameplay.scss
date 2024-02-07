@@ -258,9 +258,6 @@ h2, h3, h4 {
 }
 
 @media only screen and (min-width: variables.$mobileWidth) {
-    #advancedMenu {
-        display: flex;
-    }
     .menu-item {
         flex-direction: column;
         width: 18vw;
@@ -406,13 +403,16 @@ h2, h3, h4 {
 }
 
 // Advanced menu: only visible on desktop
-@media only screen and (min-width: variables.$mobileWidth) {   
+@media only screen and (min-width: variables.$mobileWidth) {
+    #advancedMenu {
+        display: flex;
+    }
     #example {
-        height: 15vw;
-        width: 15vw;
+        height: 14vw;
+        width: 14vw;
         background-color: white;
         position: relative;
-        margin-top: 1em;
+        margin-top: 0.5em;
     }
     #collageExample, #collageSelector {
         width: 100%;

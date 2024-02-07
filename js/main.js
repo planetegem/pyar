@@ -31,7 +31,7 @@ const promptIncoming = document.getElementById("promptIncoming");
 const promptField = document.getElementById("promptField");
 
 function startPromptRequest(){
-    //getPrompt();
+    getPrompt();
 
     promptReceived = true;
     animationStart = Date.now();

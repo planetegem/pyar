@@ -175,7 +175,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
         <aside id="advancedMenu" class="desktop">
             <section id="collageTool" class="menu-item">
                 <h2>collage selector</h2>
-                <p class="infoText">Upload an image to paint it on the canvas. Max file size is 2MB, square images are advised.</p>
+                <p class="infoText">Upload an image to use as brush. Square images are advised.</p>
                 <div id="example">
                     <img id="collageExample" src="assets/blank.svg">
                     <canvas id="collageSelector"></canvas>

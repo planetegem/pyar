@@ -156,24 +156,18 @@ cropCheckbox.addEventListener("change", () => {
     }
 });
 // Load selected image for collage tool
-let maxFileSize = 3048576;
 collageButton.addEventListener("change", (e) => {
-    if (collageButton.files[0].size > maxFileSize){
-        document.getElementById("collageOutput").innerHTML = "file is too big (max 3mb)";
-        collageButton.value = "";
-    } else if (collageButton.files[0].size <= maxFileSize){
-        let tempImg = new Image();
-        tempImg.onload = () => {
-            imageWidth = tempImg.width;
-            imageHeight = tempImg.height;
-            activateCollage();
-        };
-        tempImg.src = URL.createObjectURL(collageButton.files[0]);
-        
-        let img = document.getElementById("collageExample");
-        img.src = URL.createObjectURL(collageButton.files[0]);
-        quickSave();
+    let tempImg = new Image();
+    tempImg.onload = () => {
+        imageWidth = tempImg.width;
+        imageHeight = tempImg.height;
+        activateCollage();
     };
+    tempImg.src = URL.createObjectURL(collageButton.files[0]);
+        
+    let img = document.getElementById("collageExample");
+    img.src = URL.createObjectURL(collageButton.files[0]);
+    quickSave();
 });
 
 // Collage size slider
