@@ -290,7 +290,7 @@ function buildSubmissionConfirmed(){
     dbButton.id = "dbButton";
     dbButton.innerText = "visit database";
     dbButton.addEventListener("click", () => {
-        window.open("output.php");
+        window.open("output/index.php");
     });
     feedbackField.appendChild(dbButton);
 }

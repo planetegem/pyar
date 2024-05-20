@@ -69,14 +69,71 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
 <html xmlns="https://www.w3.org/1999/xhtml" lang="nl" xml:lang="nl">
 <head>
     <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
-    <meta name="description" content="Prove you're a robot, or else!">
     <meta name="keywords" content="paint, image editing, AI image generator, browser game, HTML5 game">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="googlebot" content="notranslate">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Niels Van Damme">
-    <title>Prove you're a robot - the game</title>
     <link rel="stylesheet" href="style/main.css">
+
+    <!-- meta title -->
+    <title>Prove you're a robot - the game</title>
+    <meta property="og:title" content="Prove you're a robot - the game">
+    <meta name="twitter:title" content="Prove you're a robot - the game">
+    <!-- meta description -->
+    <meta name="description" content="Can you draw faster than humans can type prompts? Pretend to be an AI like Dall-e or Midjourney in this exciting online webgame!">
+    <meta property="og:description" content="Can you draw faster than humans can type prompts? Pretend to be an AI like Dall-e or Midjourney in this exciting online webgame!">
+    <meta name="twitter:description" content="Can you draw faster than humans can type prompts? Pretend to be an AI like Dall-e or Midjourney in this exciting online webgame!">
+    <!-- canonicals -->
+    <link rel="canonical" content="https://www.planetegem.be/eb/pyar">
+    <meta property="og:url" content="https://www.planetegem.be/eb/pyar">
+    <meta property="og:site_name" content="Prove you're a robot - the game">
+    <meta name="twitter:url" content="https://www.planetegem.be/eb/pyar">
+    <!-- meta image -->
+    <meta property="og:image" content="https://wwww.planetegem.be/eb/pyar/assets/pyarLogo.svg">
+    <meta property="og:image:secure_url" content="https://wwww.planetegem.be/eb/pyar/assets/pyarLogo.svg">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="250">
+    <meta property="og:image:height" content="250">
+    <meta property="og:image:alt" content="A robot examining itself">
+    <meta name="twitter:image" content="https://wwww.planetegem.be/eb/pyar/assets/pyarLogo.svg">
+    <!-- Structured data -->
+    <script type="application/ld+json">
+            {
+                "@context": "https://www.schema.org",
+                "@type": "VideoGame",
+                "name": "Prove You're A Robot",
+                "description": "Can you draw faster than humans can type prompts? Pretend to be an AI like Dall-e or Midjourney in this exciting online webgame!",
+                "url": "https://www.planetegem.be/eb/pyar",
+                "thumbnail": "https://wwww.planetegem.be/eb/pyar/assets/pyarLogo.svg",
+                "image": "https://wwww.planetegem.be/eb/pyar/assets/pyarLogo.svg",
+                "playmode": "single-player",
+                "gamePlatform": "PC Game",
+                "creator": {
+                    "@type": "Person",
+                    "givenName": "Niels",
+                    "familyName": "Van Damme",
+                    "affiliation": {
+                        "@type": "Organization",
+                        "name": "Planetegem",
+                        "description": "Online platform specialized in unique Belgian content, from webgames to sci-fi novels",
+                        "image": "https://www.planetegem.be/style/assets/planet.png",
+                        "logo": "https://www.planetegem.be/style/assets/planet.png",
+                        "url": "https://www.planetegem.be",
+                        "sameAs": "https://www.instagram.com/planetegem/"
+                    },
+                    "brand": {
+                        "@type": "Organization",
+                        "name": "Planetegem",
+                        "description": "Online platform specialized in unique Belgian content, from webgames to sci-fi novels",
+                        "image": "https://www.planetegem.be/style/assets/planet.png",
+                        "logo": "https://www.planetegem.be/style/assets/planet.png",
+                        "url": "https://www.planetegem.be",
+                        "sameAs": "https://www.instagram.com/planetegem/"
+                    }
+                }
+            }
+        </script>
 </head>
 
 <body>
@@ -88,9 +145,9 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
         <section id="prompt">
             <div id="promptFieldContainer">
                 <span id="promptIncoming">
-                    <img src="assets/warning.svg">
+                    <img src="assets/warning.svg" alt="WARNING">
                     <h2>PROMPT INCOMING</h2>
-                    <img src="assets/warning.svg">
+                    <img src="assets/warning.svg" alt="WARNING">
                 </span>
                 <div id="promptField">
                     <p>a human has prompted you to draw</p>
@@ -101,7 +158,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
             </div>
             <div id="promptButtons">
                 <button id="promptRequest" class="button">
-                    <img src="assets/recycle.svg">
+                    <img src="assets/recycle.svg" alt="reload-button">
                 </button>
                 <button id="submitButton" class="button">
                     <h3>submit image</h3>
@@ -122,16 +179,16 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
                 <p class="infoText desktop">Choose between the pencil, line and eraser tool. Desktop users can also shortcut to the collage tool.</p>
                 <div id="penOptions">
                     <button id="pencil" class="button">
-                        <img src="assets/pencil.svg">
+                        <img src="assets/pencil.svg" alt="pencil tool">
                     </button>
                     <button id="line" class="button">
-                        <img src="assets/line.svg">
+                        <img src="assets/line.svg" alt="line tool">
                     </button>
                     <button id="eraser" class="button">
-                        <img src="assets/eraser.svg">
+                        <img src="assets/eraser.svg" alt="eraser tool">
                     </button>
                     <button id="collage" class="button desktop">
-                        <img src="assets/collage.svg">
+                        <img src="assets/collage.svg" alt="collage tool">
                     </button>
                 </div>
                 <div id="penSize">
@@ -223,14 +280,14 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
     <!-- Dialogs -->
     <dialog id="evaluating">
         <div id="logoContainer">
-            <img id="cog" src="assets/cog.svg">
-            <img id="foreground" src="assets/pyarForeground.svg">
+            <img id="cog" src="assets/cog.svg" alt="cogwheel">
+            <img id="foreground" src="assets/pyarForeground.svg" alt="robot examining itself: the logo of Prove You're A Robot">
         </div>
         <p id="evalText"></p>
     </dialog>
 
     <dialog id="captcha">
-        <img class="logo" src="assets/pyarLogo.svg">
+        <img class="logo" src="assets/pyarLogo.svg" alt="robot examining itself: the logo of Prove You're A Robot">
         <p>
             Welcome to Prove you're a Robot&#x2122! 
             <br>
@@ -247,18 +304,18 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
     </dialog>
 
     <dialog id="feedback">
-        <img class="logo" src="assets/pyarLogo.svg">
+        <img class="logo" src="assets/pyarLogo.svg" alt="robot examining itself: the logo of Prove You're A Robot">
         <div id="feedbackField"></div>
         <button id="feedbackConfirm" class="button"></button>
     </dialog>
 
     <dialog id="submitMenu">
-        <img class="logo" src="assets/pyarLogo.svg">
+        <img class="logo" src="assets/pyarLogo.svg" alt="robot examining itself: the logo of Prove You're A Robot">
         <button id="cancelSubmit">x</button>
         <h2>automatic report</h2>
         <p id="conclusion"></p>
         <h3>your creation:</h3>
-        <img id="finalCanvasPreview" src="assets/blank.svg">
+        <img id="finalCanvasPreview" src="assets/blank.svg" alt="no image found">
         <p id="submitPrompt"></p>
         <form id="submitForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <label for="username" id="username-container">
@@ -270,8 +327,8 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
                     <h3>submit to database</h3>
                 </button>
                 <button type="button" class="button" id="download">
-                    <img src="assets/dlBox.svg" id="dlBox">
-                    <img src="assets/dlArrow.svg" id="dlArrow">
+                    <img src="assets/dlBox.svg" id="dlBox" alt="download">
+                    <img src="assets/dlArrow.svg" id="dlArrow" alt="dropbox">
                 </button>
             </div>
             <!-- secret data sent when submitting! -->
